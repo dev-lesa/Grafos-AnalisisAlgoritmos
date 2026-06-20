@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AlgoritmosGrafos-impl" default="default" basedir="..">
+
+    <property file="nbproject/private/private.properties"/>
+    <property file="nbproject/project.properties"/>
+
+    <!-- ============================================================ -->
+    <!--  Init                                                         -->
+    <!-- ============================================================ -->
+    <target name="init">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Compile                                                      -->
+    <!-- ============================================================ -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}"
+               destdir="${build.classes.dir}"
+               debug="true"
+               includeantruntime="false"
+               encoding="${source.encoding}">
+        </javac>
+        <!-- copy data folder into build so run works from build dir -->
+        <copy todir="${build.classes.dir}/../data" failonerror="false">
+            <fileset dir="${basedir}/data"/>
+        </copy>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Jar                                                          -->
+    <!-- ============================================================ -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+        <echo>To run: java -jar ${dist.jar}</echo>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Run                                                          -->
+    <!-- ============================================================ -->
+    <target name="run" depends="compile">
+        <java classname="${main.class}"
+              fork="true"
+              dir="${basedir}">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Run Single (usado por NetBeans al hacer Run File)            -->
+    <!-- ============================================================ -->
+    <target name="run-single" depends="compile">
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <java classname="${run.class}"
+              fork="true"
+              dir="${basedir}">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Debug                                                        -->
+    <!-- ============================================================ -->
+    <target name="debug" depends="compile">
+        <java classname="${main.class}"
+              fork="true"
+              dir="${basedir}">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address},server=n,suspend=y"/>
+        </java>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Debug Single (usado por NetBeans al hacer Debug File)        -->
+    <!-- ============================================================ -->
+    <target name="debug-single" depends="compile">
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <java classname="${run.class}"
+              fork="true"
+              dir="${basedir}">
+            <classpath>
+                <pathelement path="${build.classes.dir}"/>
+            </classpath>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address},server=n,suspend=y"/>
+        </java>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Clean                                                        -->
+    <!-- ============================================================ -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Test (vacio, requerido por NetBeans)                         -->
+    <!-- ============================================================ -->
+    <target name="test" depends="compile"/>
+    <target name="test-single" depends="compile"/>
+
+    <!-- ============================================================ -->
+    <!--  Javadoc                                                      -->
+    <!-- ============================================================ -->
+    <target name="javadoc" depends="init">
+        <mkdir dir="${dist.javadoc.dir}"/>
+        <javadoc sourcepath="${src.dir}"
+                 destdir="${dist.javadoc.dir}"
+                 charset="UTF-8"
+                 encoding="${source.encoding}">
+        </javadoc>
+    </target>
+
+    <!-- ============================================================ -->
+    <!--  Default                                                      -->
+    <!-- ============================================================ -->
+    <target name="default" depends="run"/>
+
+</project>
